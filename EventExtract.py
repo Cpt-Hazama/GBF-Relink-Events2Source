@@ -22,14 +22,14 @@ def process_xml_file(xml_file):
         if event_type == "facialmotion":
             for seq in root.findall(".//FacialMotionTrack"):
                 for event in seq.findall(".//Seq"):
-                    frame = int(float(event.get("StartTime")) * 30) + 1
+                    frame = int(float(event.get("StartTime")) * 60) + 1
                     event_name = f"facialmotion {event.get('AnimationNo')}"
                     events.append((frame, event_name))
                     print(f"Processed {event_name} ({frame}) ({event.get('StartTime')}s)")
         else:
             for seq in root.findall(f".//{event_type.capitalize()}Track"):
                 for event in seq.findall(".//Seq"):
-                    frame = int(float(event.get("StartTime")) * 30) + 1
+                    frame = int(float(event.get("StartTime")) * 60) + 1
                     if event_type == "se":
                         event_name = f"se {event.get('EventName')}"
                     elif event_type == "effect":
