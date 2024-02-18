@@ -18,7 +18,7 @@ def process_xml_file(xml_file):
 
     # Extract event data from XML based on event type
     events = []
-    if event_type in ["se", "effect", "facialmotion", "flags"]:
+    if event_type in ["se", "effect", "facialmotion", "flags", "attack"]:
         if event_type == "facialmotion":
             for seq in root.findall(".//FacialMotionTrack"):
                 for event in seq.findall(".//Seq"):
@@ -36,6 +36,8 @@ def process_xml_file(xml_file):
                         event_name = f"effect {event.get('EffNo')}"
                     elif event_type == "flags":
                         event_name = f"flag {event.get('Flag0')}"
+                    elif event_type == "attack":
+                        event_name = f"attack {animation_id}"
                     else:
                         event_name = ""
                     events.append((frame, event_name))
