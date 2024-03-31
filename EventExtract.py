@@ -1,22 +1,19 @@
 import os
 import xml.etree.ElementTree as ET
 
-# Function to extract data from XML
 def process_xml_file(xml_file):
     print(f"Processing XML file: {xml_file}")
     tree = ET.parse(xml_file)
     root = tree.getroot()
 
-    # Extract animation ID and event type from XML file name
     xml_filename = os.path.splitext(os.path.basename(xml_file))[0]
     parts = xml_filename.split('_')
     animation_id = parts[1]
-    event_type = parts[-1].split('.')[0]  # Exclude the file extension
+    event_type = parts[-1].split('.')[0]
     print(f"{xml_file} Data Found:")
     print(f"AnimationID = {animation_id}")
     print(f"EventsType = {event_type}")
 
-    # Extract event data from XML based on event type
     events = []
     if event_type in ["se", "effect", "facialmotion", "flags", "attack"]:
         if event_type == "facialmotion":
@@ -49,10 +46,8 @@ def process_xml_file(xml_file):
     print(f"Finished processing {xml_file}\n")
     return animation_id, events
 
-# Process all XML files in the directory
 xml_files = [f for f in os.listdir('.') if f.endswith('.xml')]
 
-# Dictionary to store events for each animation ID
 animation_events = {}
 
 for xml_file in xml_files:
@@ -62,10 +57,8 @@ for xml_file in xml_files:
     animation_events[animation_id].extend(events)
     print(f"Processed {len(events)} events from {xml_file}\n")
 
-# Write to QCI file
 with open("events.QCI", 'w') as qci_file:
     for animation_id, events in animation_events.items():
-        # Sort events by event type first, then by frame
         events.sort(key=lambda x: (x[1].split()[0], x[0]))
         qci_file.write(f"$Sequence \"{animation_id}\" {{\n")
         current_event_type = None
